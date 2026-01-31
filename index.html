@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
@@ -17,24 +18,57 @@
                 <h1>☀️ Daily Briefing</h1>
                 <p id="current-date"></p>
             </div>
-            <button class="refresh-btn" onclick="refreshData()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M23 4v6h-6M1 20v-6h6"/>
-                    <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-                </svg>
-                Refresh
-            </button>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+                <button class="refresh-btn" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
         </header>
+
+        <!-- Weather Section -->
+        <section class="weather-section">
+            <div class="weather-card">
+                <div class="weather-main">
+                    <i class="fas fa-sun weather-icon" id="weather-icon"></i>
+                    <div class="weather-temp">
+                        <span id">--°</span>
+                        <span class="weather-location="weather-temp" id="weather-location">Loading...</span>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <i class="fas fa-tint"></i>
+                        <span id="weather-humidity">--%</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-wind"></i>
+                        <span id="weather-wind">-- mph</span>
+                    </div>
+                    <div class="weather-detail">
+                        <i class="fas fa-cloud"></i>
+                        <span id="weather-condition">--</span>
+                    </div>
+                </div>
+            </div>
+            <div class="quote-card">
+                <p class="quote-text" id="daily-quote">"Loading inspiration..."</p>
+                <p class="quote-author" id="quote-author">--</p>
+            </div>
+        </section>
 
         <!-- Stock & Crypto Ticker -->
         <section class="ticker-section">
             <div class="ticker-wrapper">
-                <div class="ticker-item" id="stock-ticker">
+                <div class="ticker-item">
                     <span class="ticker-label">S&P 500</span>
                     <span class="ticker-value" id="sp500">Loading...</span>
                     <span class="ticker-change" id="sp500-change">--</span>
                 </div>
-                <div class="ticker-item" id="crypto-ticker">
+                <div class="ticker-item">
                     <span class="ticker-label">Bitcoin</span>
                     <span class="ticker-value" id="btc-price">Loading...</span>
                     <span class="ticker-change" id="btc-change">--</span>
@@ -43,6 +77,11 @@
                     <span class="ticker-label">Ethereum</span>
                     <span class="ticker-value" id="eth-price">Loading...</span>
                     <span class="ticker-change" id="eth-change">--</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="ticker-label">NASDAQ</span>
+                    <span class="ticker-value" id="nasdaq">Loading...</span>
+                    <span class="ticker-change" id="nasdaq-change">--</span>
                 </div>
             </div>
         </section>
@@ -53,18 +92,29 @@
             <section class="card briefing-card">
                 <div class="card-header">
                     <h2>📰 Today's Briefing</h2>
-                    <a href="#" class="view-all" onclick="openFolder('daily-briefings')">View All</a>
+                    <a href="briefings.html" class="view-all">View All</a>
                 </div>
                 <div class="card-content" id="briefing-content">
                     <div class="loading">Loading today's briefing...</div>
                 </div>
             </section>
 
+            <!-- Quick Notes Card -->
+            <section class="card notes-card">
+                <div class="card-header">
+                    <h2>📝 Quick Notes</h2>
+                    <button class="small-btn" onclick="saveNotes()">Save</button>
+                </div>
+                <div class="card-content">
+                    <textarea id="quick-notes" placeholder="Jot down your thoughts, tasks, or reminders for today..."></textarea>
+                </div>
+            </section>
+
             <!-- Social Posts Card -->
             <section class="card social-card">
                 <div class="card-header">
-                    <h2>📱 Today's Social Posts</h2>
-                    <span class="badge" id="post-count">0 posts</span>
+                    <h2>📱 Today's Posts</h2>
+                    <a href="posts.html" class="view-all">View All</a>
                 </div>
                 <div class="card-content" id="social-content">
                     <div class="loading">Loading social posts...</div>
@@ -75,17 +125,87 @@
             <section class="card tiktok-card">
                 <div class="card-header">
                     <h2>🎬 Today's TikTok</h2>
-                    <span class="badge">Buzz 🐝</span>
+                    <a href="tiktok.html" class="view-all">View All</a>
                 </div>
                 <div class="card-content" id="tiktok-content">
                     <div class="loading">Loading TikTok content...</div>
                 </div>
             </section>
 
+            <!-- Quick Links Card -->
+            <section class="card links-card">
+                <div class="card-header">
+                    <h2>⚡ Quick Links</h2>
+                </div>
+                <div class="card-content">
+                    <div class="quick-links-grid">
+                        <a href="https://mail.google.com" target="_blank" class="quick-link-btn">
+                            <i class="fas fa-envelope"></i>
+                            <span>Gmail</span>
+                        </a>
+                        <a href="https://calendar.google.com" target="_blank" class="quick-link-btn">
+                            <i class="fas fa-calendar"></i>
+                            <span>Calendar</span>
+                        </a>
+                        <a href="https://drive.google.com" target="_blank" class="quick-link-btn">
+                            <i class="fas fa-cloud"></i>
+                            <span>Drive</span>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" class="quick-link-btn">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="https://reddit.com" target="_blank" class="quick-link-btn">
+                            <i class="fab fa-reddit"></i>
+                            <span>Reddit</span>
+                        </a>
+                        <a href="https://youtube.com" target="_blank" class="quick-link-btn">
+                            <i class="fab fa-youtube"></i>
+                            <span>YouTube</span>
+                        </a>
+                        <a href="https://chatgpt.com" target="_blank" class="quick-link-btn">
+                            <i class="fas fa-robot"></i>
+                            <span>ChatGPT</span>
+                        </a>
+                        <a href="https://claude.ai" target="_blank" class="quick-link-btn">
+                            <i class="fas fa-brain"></i>
+                            <span>Claude</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Events -->
+            <section class="card events-card">
+                <div class="card-header">
+                    <h2>📅 Today's Schedule</h2>
+                </div>
+                <div class="card-content">
+                    <div class="events-list" id="events-list">
+                        <div class="event-item">
+                            <span class="event-time">06:00</span>
+                            <span class="event-text">Daily Briefing</span>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-time">09:00</span>
+                            <span class="event-text">Buzz (TikTok)</span>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-time">18:00</span>
+                            <span class="event-text">ContentBot (Buffer)</span>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-time">20:00</span>
+                            <span class="event-text">Daily Journal</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Quick Access Card -->
             <section class="card quick-access-card">
                 <div class="card-header">
-                    <h2>📁 Quick Access</h2>
+                    <h2>📁 My Folders</h2>
                 </div>
                 <div class="card-content">
                     <div class="quick-links">
@@ -116,38 +236,11 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Upcoming Events -->
-            <section class="card events-card">
-                <div class="card-header">
-                    <h2>📅 Upcoming</h2>
-                </div>
-                <div class="card-content">
-                    <div class="events-list" id="events-list">
-                        <div class="event-item">
-                            <span class="event-time">06:00</span>
-                            <span class="event-text">Daily Briefing</span>
-                        </div>
-                        <div class="event-item">
-                            <span class="event-time">09:00</span>
-                            <span class="event-text">Buzz (TikTok)</span>
-                        </div>
-                        <div class="event-item">
-                            <span class="event-time">18:00</span>
-                            <span class="event-text">ContentBot (Buffer)</span>
-                        </div>
-                        <div class="event-item">
-                            <span class="event-time">20:00</span>
-                            <span class="event-text">Daily Journal</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </main>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>Last updated: <span id="last-updated">--</span></p>
+            <p>Last updated: <span id="last-updated">--</span> | <a href="#" onclick="openFolder('daily-briefing-dashboard')">Edit Dashboard</a></p>
         </footer>
     </div>
 
