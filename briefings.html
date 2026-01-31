@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Briefings Archive</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .content-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .content-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .content-header p {
+            opacity: 0.9;
+        }
+        .content-nav {
+            background: var(--bg-card);
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .content-nav a {
+            color: var(--accent);
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .content-nav a:hover {
+            text-decoration: underline;
+        }
+        .briefing-list {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .briefing-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .briefing-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--accent);
+        }
+        .briefing-item h3 {
+            margin-bottom: 8px;
+        }
+        .briefing-item .date {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+        .briefing-item .preview {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="content-header">
+        <h1>📰 Briefing Archive</h1>
+        <p>Click any briefing to read the full content</p>
+    </header>
+    
+    <nav class="content-nav">
+        <a href="index.html">← Back to Dashboard</a>
+        <a href="briefings.html">Briefings</a>
+        <a href="posts.html">Social Posts</a>
+        <a href="tiktok.html">TikTok Content</a>
+    </nav>
+
+    <main class="briefing-list" id="briefing-list">
+        <div class="loading">Loading briefings...</div>
+    </main>
+
+    <script>
+        const repo = 'thornclawdbot/daily-briefing-dashboard';
+        const branch = 'master';
+        const dataPath = 'data/briefings';
+
+        async function loadBriefings() {
+            const container = document.getElementById('briefing-list');
+            
+            try {
+                // Get the directory listing from GitHub API
+                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${dataPath}`);
+                const folders = await response.json();
+                
+                let allBriefings = [];
+                
+                for (const monthFolder of folders) {
+                    if (monthFolder.type === 'dir') {
+                        const monthResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${monthFolder.path}`);
+                        const weekFolders = await monthResponse.json();
+                        
+                        for (const weekFolder of weekFolders) {
+                            if (weekFolder.type === 'dir') {
+                                const weekResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${weekFolder.path}`);
+                                const files = await weekResponse.json();
+                                
+                                for (const file of files) {
+                                    if (file.name.endsWith('.md')) {
+                                        const fileResponse = await fetch(file.download_url);
+                                        const content = await fileResponse.text();
+                                        
+                                        // Extract date and preview from content
+                                        const titleMatch = content.match(/^# (.+)/m);
+                                        const previewMatch = content.match(/\n\n(.+?)\n\n/);
+                                        
+                                        allBriefings.push({
+                                            title: titleMatch ? titleMatch[1] : file.name,
+                                            date: file.name.replace('.md', ''),
+                                            preview: previewMatch ? previewMatch[1].substring(0, 200) + '...' : 'Click to read more...',
+                                            url: file.download_url
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Sort by date (newest first)
+                allBriefings.sort((a, b) => b.date.localeCompare(a.date));
+                
+                // Render
+                container.innerHTML = allBriefings.map(b => `
+                    <div class="briefing-item" onclick="window.open('${b.url}', '_blank')">
+                        <div class="date">${b.date}</div>
+                        <h3>${b.title}</h3>
+                        <div class="preview">${b.preview}</div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                container.innerHTML = `<div class="loading">Error loading briefings. Make sure the repository is public.</div>`;
+            }
+        }
+
+        loadBriefings();
+    </script>
+</body>
+</html>

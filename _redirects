@@ -1,0 +1,4 @@
+# Netlify redirects
+/briefings.html  /briefings.html  200
+/posts.html      /posts.html      200
+/tiktok.html     /tiktok.html     200

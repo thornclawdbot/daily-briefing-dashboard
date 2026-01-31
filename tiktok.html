@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Content Archive</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .content-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .content-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .content-nav {
+            background: var(--bg-card);
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .content-nav a {
+            color: var(--accent);
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .tiktok-list {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .tiktok-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .tiktok-item .date {
+            color: var(--accent);
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+        .tiktok-section {
+            margin-bottom: 12px;
+        }
+        .tiktok-section h4 {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .tiktok-section p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header class="content-header">
+        <h1>🎬 TikTok Content Archive</h1>
+        <p>All your Buzz-created TikTok content</p>
+    </header>
+    
+    <nav class="content-nav">
+        <a href="index.html">← Back to Dashboard</a>
+        <a href="briefings.html">Briefings</a>
+        <a href="posts.html">Social Posts</a>
+        <a href="tiktok.html">TikTok Content</a>
+    </nav>
+
+    <main class="tiktok-list" id="tiktok-list">
+        <div class="loading">Loading TikTok content...</div>
+    </main>
+
+    <script>
+        const repo = 'thornclawdbot/daily-briefing-dashboard';
+        const dataPath = 'data/tiktok';
+
+        async function loadTikTok() {
+            const container = document.getElementById('tiktok-list');
+            
+            try {
+                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${dataPath}`);
+                const folders = await response.json();
+                
+                let allTikTok = [];
+                
+                for (const monthFolder of folders) {
+                    if (monthFolder.type === 'dir') {
+                        const monthResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${monthFolder.path}`);
+                        const weekFolders = await monthResponse.json();
+                        
+                        for (const weekFolder of weekFolders) {
+                            if (weekFolder.type === 'dir') {
+                                const weekResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${weekFolder.path}`);
+                                const files = await weekResponse.json();
+                                
+                                for (const file of files) {
+                                    if (file.name.endsWith('.md')) {
+                                        const fileResponse = await fetch(file.download_url);
+                                        const content = await fileResponse.text();
+                                        
+                                        // Extract sections
+                                        const scriptMatch = content.match(/### 📝 SCRIPT[\s\S]*?(?=###|$)/i);
+                                        const captionMatch = content.match(/### #️⃣ CAPTION[\s\S]*?(?=###|$)/i);
+                                        const promptMatch = content.match(/### 📸 IMAGE PROMPT[\s\S]*?(?=###|$)/i);
+                                        
+                                        allTikTok.push({
+                                            date: file.name.replace('.md', ''),
+                                            script: scriptMatch ? scriptMatch[0].replace(/### 📝 SCRIPT/i, '').trim() : '',
+                                            caption: captionMatch ? captionMatch[0].replace(/#️⃣ CAPTION/i, '').trim() : '',
+                                            prompt: promptMatch ? promptMatch[0].replace(/### 📸 IMAGE PROMPT/i, '').trim() : ''
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                allTikTok.sort((a, b) => b.date.localeCompare(a.date));
+                
+                container.innerHTML = allTikTok.map(t => `
+                    <div class="tiktok-item">
+                        <div class="date">📅 ${t.date}</div>
+                        ${t.script ? `<div class="tiktok-section"><h4>📝 Script</h4><p>${t.script}</p></div>` : ''}
+                        ${t.caption ? `<div class="tiktok-section"><h4>#️⃣ Caption</h4><p>${t.caption}</p></div>` : ''}
+                        ${t.prompt ? `<div class="tiktok-section"><h4>📸 Image Prompt</h4><p>${t.prompt}</p></div>` : ''}
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                container.innerHTML = `<div class="loading">Error loading TikTok content.</div>`;
+            }
+        }
+
+        loadTikTok();
+    </script>
+</body>
+</html>
