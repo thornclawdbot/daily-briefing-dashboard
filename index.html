@@ -60,30 +60,67 @@
             </div>
         </section>
 
-        <!-- Stock & Crypto Ticker -->
-        <section class="ticker-section">
-            <div class="ticker-wrapper">
-                <div class="ticker-item">
-                    <span class="ticker-label">S&P 500</span>
-                    <span class="ticker-value" id="sp500">Loading...</span>
-                    <span class="ticker-change" id="sp500-change">--</span>
-                </div>
-                <div class="ticker-item">
-                    <span class="ticker-label">Bitcoin</span>
-                    <span class="ticker-value" id="btc-price">Loading...</span>
-                    <span class="ticker-change" id="btc-change">--</span>
-                </div>
-                <div class="ticker-item">
-                    <span class="ticker-label">Ethereum</span>
-                    <span class="ticker-value" id="eth-price">Loading...</span>
-                    <span class="ticker-change" id="eth-change">--</span>
-                </div>
-                <div class="ticker-item">
-                    <span class="ticker-label">NASDAQ</span>
-                    <span class="ticker-value" id="nasdaq">Loading...</span>
-                    <span class="ticker-change" id="nasdaq-change">--</span>
+        <!-- Ticker & Folders Row -->
+        <section class="ticker-folders-row">
+            <div class="ticker-section-folders">
+                <div class="ticker-wrapper">
+                    <div class="ticker-item">
+                        <span class="ticker-label">S&P 500</span>
+                        <span class="ticker-value" id="sp500">Loading...</span>
+                        <span class="ticker-change" id="sp500-change">--</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-label">Bitcoin</span>
+                        <span class="ticker-value" id="btc-price">Loading...</span>
+                        <span class="ticker-change" id="btc-change">--</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-label">Ethereum</span>
+                        <span class="ticker-value" id="eth-price">Loading...</span>
+                        <span class="ticker-change" id="eth-change">--</span>
+                    </div>
+                    <div class="ticker-item">
+                        <span class="ticker-label">NASDAQ</span>
+                        <span class="ticker-value" id="nasdaq">Loading...</span>
+                        <span class="ticker-change" id="nasdaq-change">--</span>
+                    </div>
                 </div>
             </div>
+            
+            <!-- Quick Access Card (moved here) -->
+            <section class="card quick-access-card-folders">
+                <div class="card-header">
+                    <h2>📁 My Folders</h2>
+                </div>
+                <div class="card-content">
+                    <div class="quick-links-row">
+                        <a href="https://daily-briefing-thorn.netlify.app/briefings.html" class="quick-link">
+                            <span class="link-icon">📰</span>
+                            <span class="link-text">Briefings</span>
+                        </a>
+                        <a href="https://daily-briefing-thorn.netlify.app/posts.html" class="quick-link">
+                            <span class="link-icon">📱</span>
+                            <span class="link-text">Posts</span>
+                        </a>
+                        <a href="https://daily-briefing-thorn.netlify.app/tiktok.html" class="quick-link">
+                            <span class="link-icon">🎬</span>
+                            <span class="link-text">TikTok</span>
+                        </a>
+                        <a href="https://daily-briefing-thorn.netlify.app/stock-report.html" class="quick-link">
+                            <span class="link-icon">📈</span>
+                            <span class="link-text">Stocks</span>
+                        </a>
+                        <a href="https://thornclawdbot.github.io/cold-case-christianity/" class="quick-link" target="_blank">
+                            <span class="link-icon">📚</span>
+                            <span class="link-text">Cold Case</span>
+                        </a>
+                        <a href="https://daily-briefing-thorn.netlify.app" class="quick-link" target="_blank">
+                            <span class="link-icon">📝</span>
+                            <span class="link-text">Journal</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <!-- Main Grid -->
@@ -201,46 +238,9 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Quick Access Card -->
-            <section class="card quick-access-card">
-                <div class="card-header">
-                    <h2>📁 My Folders</h2>
-                </div>
-                <div class="card-content">
-                    <div class="quick-links">
-                        <a href="https://daily-briefing-thorn.netlify.app/briefings.html" class="quick-link">
-                            <span class="link-icon">📰</span>
-                            <span class="link-text">Briefings</span>
-                        </a>
-                        <a href="https://daily-briefing-thorn.netlify.app/posts.html" class="quick-link">
-                            <span class="link-icon">📱</span>
-                            <span class="link-text">Buffer Posts</span>
-                        </a>
-                        <a href="https://daily-briefing-thorn.netlify.app/tiktok.html" class="quick-link">
-                            <span class="link-icon">🎬</span>
-                            <span class="link-text">TikTok</span>
-                        </a>
-                        <a href="https://daily-briefing-thorn.netlify.app/stock-report.html" class="quick-link">
-                            <span class="link-icon">📈</span>
-                            <span class="link-text">Stock Report</span>
-                        </a>
-                        <a href="https://thornclawdbot.github.io/cold-case-christianity/" class="quick-link" target="_blank">
-                            <span class="link-icon">📚</span>
-                            <span class="link-text">Cold Case</span>
-                        </a>
-                        <a href="https://daily-briefing-thorn.netlify.app" class="quick-link" target="_blank">
-                            <span class="link-icon">📝</span>
-                            <span class="link-text">Journal</span>
-                        </a>
-                        <a href="#" class="quick-link" onclick="alert('Memory: C:/Users/thoms/clawd/memory'); return false;">
-                            <span class="link-icon">🧠</span>
-                            <span class="link-text">Memory</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
         </main>
+
+        <!-- Footer -->
 
         <!-- Footer -->
         <footer class="footer">

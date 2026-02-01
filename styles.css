@@ -208,6 +208,45 @@ body {
     margin-bottom: 16px;
 }
 
+.ticker-folders-row {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.ticker-section-folders .ticker-wrapper {
+    margin-bottom: 0;
+}
+
+.quick-access-card-folders {
+    height: fit-content;
+}
+
+.quick-access-card-folders .card-content {
+    padding: 12px;
+}
+
+.quick-links-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.quick-links-row .quick-link {
+    flex-direction: column;
+    padding: 10px 6px;
+    gap: 4px;
+}
+
+.quick-links-row .link-icon {
+    font-size: 1.2rem;
+}
+
+.quick-links-row .link-text {
+    font-size: 0.7rem;
+}
+
 .ticker-wrapper {
     display: flex;
     gap: 12px;
