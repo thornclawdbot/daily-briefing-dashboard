@@ -289,16 +289,19 @@ function parseAndRenderBriefing(content) {
 
     const container = document.getElementById('briefing-content');
     container.innerHTML = topics.length > 0 ? `
-        <div class="briefing-content">
+        <div class="briefing-summary">
             ${topics.map(topic => `
                 <div class="briefing-topic">
-                    <div class="topic-icon">${topic.icon}</div>
-                    <div class="topic-title">${topic.title}</div>
-                    <div class="topic-preview">${topic.preview || 'Click to read more'}</div>
+                    <span class="briefing-icon">${topic.icon}</span>
+                    <div class="briefing-info">
+                        <div class="briefing-title">${topic.title}</div>
+                        <div class="briefing-preview">${topic.preview || 'Click View All to read more'}</div>
+                    </div>
+                    <a href="https://daily-briefing-thorn.netlify.app/briefings.html" class="briefing-more">View →</a>
                 </div>
             `).join('')}
         </div>
-    ` : `<div class="loading">No briefing available for today</div>`;
+    ` : `<div class="loading">No briefing available. Check back at 6 AM!</div>`;
 }
 
 // Get topic icon
